@@ -42,7 +42,20 @@ module.exports = {
         return new Promise(function (resolve, reject) {
             var dateCheck = data.dateCheck;
             var hotel = data.hotel;
-            var sql = "SELECT \n\t\t\tCONFIRMATION_NO confirmation_no,\n\t\t\tRESV_NAME_ID resv_name_id ,\n\t\t\tNAME_ID name_id,\n\t\t\tEMAIL email ,\n\t\t\tGUEST_FIRST_NAME nameTitular ,\n\t\t\tGUEST_NAME lastNameTitular\n\t\t\tfrom name_reservation\n\t\t\twhere arrival = TO_DATE(:dateCheck, 'dd-mm-yy')\n\t\t\tand Resv_status = 'RESERVED'\n\t\t\tand EMAIL IS NOT NULL";
+            var sql = `SELECT
+            CONFIRMATION_NO confirmation_no,
+            RESV_NAME_ID resv_name_id ,
+            NAME_ID name_id,
+            EMAIL email,
+            GUEST_FIRST_NAME nameTitular,
+            block_code,
+            GUEST_NAME lastNameTitular
+            from name_reservation
+            where arrival = TO_DATE(:dateCheck, 'dd-mm-yy')
+            and Resv_status = 'RESERVED'
+            and EMAIL IS NOT NULL
+            and block_code IS NULL`
+            
             oracleCn.open(sql, [dateCheck], false)
                 .then(function (data) {
                 resolve(data);
